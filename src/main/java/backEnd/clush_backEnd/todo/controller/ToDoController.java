@@ -1,4 +1,79 @@
 package backEnd.clush_backEnd.todo.controller;
 
+import backEnd.clush_backEnd.todo.DTO.ModifyToDoDTO;
+import backEnd.clush_backEnd.todo.DTO.ToDoDTO;
+import backEnd.clush_backEnd.todo.entity.ToDo;
+import backEnd.clush_backEnd.todo.service.ToDoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api/todos")
 public class ToDoController {
+    @Autowired
+    private ToDoService toDoService;
+
+    // 할 일 생성
+    @PostMapping
+    public ResponseEntity<Map<String, Boolean>> createToDo(@RequestBody ToDoDTO toDoRequest) {
+        Map<String, Boolean> response = new HashMap<>();
+        try {
+            toDoService.createToDo(toDoRequest.getUserId(), toDoRequest.getTitle(), toDoRequest.getDescription());
+            response.put("success", true);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            response.put("success", false);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    // 특정 사용자의 모든 할 일 조회
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ToDo>> getToDosByUserId(@PathVariable Long userId) {
+        List<ToDo> toDos = toDoService.getToDosByUserId(userId);
+        return ResponseEntity.ok(toDos);
+    }
+
+    // 특정 할 일 단일 조회
+    @GetMapping("/{toDoId}")
+    public ResponseEntity<ToDo> getToDoById(@PathVariable Long toDoId) {
+        Optional<ToDo> toDo = toDoService.getToDoById(toDoId);
+        return toDo.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    // 할 일 수정
+    @PutMapping("/{toDoId}")
+    public ResponseEntity<Map<String, Boolean>> updateToDo(@RequestBody ModifyToDoDTO toDoRequest) {
+        Map<String, Boolean> response = new HashMap<>();
+        try {
+            toDoService.updateToDo(toDoRequest.getUserId(), toDoRequest.getStatus());
+            response.put("success", true);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            response.put("success", false);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
+    // 할 일 삭제
+    @DeleteMapping("/{toDoId}")
+    public ResponseEntity<Map<String, Boolean>> deleteToDo(@PathVariable Long toDoId) {
+        Map<String, Boolean> response = new HashMap<>();
+        try {
+            toDoService.deleteToDo(toDoId);
+            response.put("success", true);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            response.put("success", false);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
 }

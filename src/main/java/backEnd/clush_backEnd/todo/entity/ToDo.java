@@ -18,13 +18,21 @@ public class ToDo {
 
     private String description;
 
-    private boolean completed;
+    @Enumerated(EnumType.STRING)
+    private ToDoStatus status = ToDoStatus.PENDING;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     private LocalDateTime writeDate;
+
+    public ToDo( String title, String description, User user, LocalDateTime writeDate) {
+        this.title = title;
+        this.description = description;
+        this.user = user;
+        this.writeDate = writeDate;
+    }
 
     public void setUser(User user) {
         if (this.user != null) {
@@ -34,5 +42,8 @@ public class ToDo {
         if (user != null && !user.getTodos().contains(this)) {
             user.getTodos().add(this);
         }
+    }
+    public void setStatus(ToDoStatus status) {
+        this.status = status;
     }
 }
