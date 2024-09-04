@@ -4,6 +4,7 @@ import backEnd.clush_backEnd.todo.DTO.ModifyToDoDTO;
 import backEnd.clush_backEnd.todo.DTO.ToDoDTO;
 import backEnd.clush_backEnd.todo.entity.ToDo;
 import backEnd.clush_backEnd.todo.service.ToDoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/todos")
+@RequiredArgsConstructor
 public class ToDoController {
-    @Autowired
-    private ToDoService toDoService;
+
+    private final ToDoService toDoService;
 
     // 할 일 생성
     @PostMapping

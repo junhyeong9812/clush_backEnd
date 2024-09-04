@@ -2,15 +2,20 @@ package backEnd.clush_backEnd.user.service;
 
 import backEnd.clush_backEnd.user.entity.User;
 import backEnd.clush_backEnd.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
 
     // 회원 가입
     public User registerUser(String username, String email, String password) {
@@ -32,5 +37,17 @@ public class UserService {
     // 회원 탈퇴
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    // 회원 단건 조회
+    @Transactional(readOnly = true)
+    public Optional<User> getUserById(Long userId) {
+        return userRepository.findById(userId);
+    }
+
+    // 회원 전체 조회
+    @Transactional(readOnly = true)
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

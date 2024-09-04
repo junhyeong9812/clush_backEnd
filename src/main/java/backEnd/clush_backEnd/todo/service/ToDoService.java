@@ -5,20 +5,22 @@ import backEnd.clush_backEnd.todo.entity.ToDoStatus;
 import backEnd.clush_backEnd.todo.repository.ToDoRepository;
 import backEnd.clush_backEnd.user.entity.User;
 import backEnd.clush_backEnd.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class ToDoService {
-    @Autowired
-    private ToDoRepository toDoRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final ToDoRepository toDoRepository;
+    private final UserRepository userRepository;
 
     // 할 일 생성
     public ToDo createToDo(Long userId, String title, String description) {
@@ -38,6 +40,7 @@ public class ToDoService {
     }
 
     // 할 일 조회 (특정 사용자 기준)
+    @Transactional(readOnly = true)
     public List<ToDo> getToDosByUserId(Long userId) {
         return toDoRepository.findByUserId(userId);
     }
@@ -64,6 +67,7 @@ public class ToDoService {
     }
 
     // 할 일 단일 조회
+    @Transactional(readOnly = true)
     public Optional<ToDo> getToDoById(Long toDoId) {
         return toDoRepository.findById(toDoId);
     }
