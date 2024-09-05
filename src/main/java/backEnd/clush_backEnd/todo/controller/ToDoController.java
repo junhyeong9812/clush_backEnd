@@ -1,6 +1,7 @@
 package backEnd.clush_backEnd.todo.controller;
 
 import backEnd.clush_backEnd.todo.DTO.ModifyToDoDTO;
+import backEnd.clush_backEnd.todo.DTO.SelectToDoDTO;
 import backEnd.clush_backEnd.todo.DTO.ToDoDTO;
 import backEnd.clush_backEnd.todo.entity.ToDo;
 import backEnd.clush_backEnd.todo.service.ToDoService;
@@ -36,18 +37,18 @@ public class ToDoController {
         }
     }
 
-    // 특정 사용자의 모든 할 일 조회
+    // 특정 사용자의 모든 할 일 조회 (DTO로 반환)
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<ToDo>> getToDosByUserId(@PathVariable Long userId) {
-        List<ToDo> toDos = toDoService.getToDosByUserId(userId);
-        return ResponseEntity.ok(toDos);
+    public ResponseEntity<List<SelectToDoDTO>> getToDosByUserId(@PathVariable Long userId) {
+        List<SelectToDoDTO> toDoDTOs = toDoService.getToDosByUserId(userId);
+        return ResponseEntity.ok(toDoDTOs);
     }
 
-    // 특정 할 일 단일 조회
+    // 특정 할 일 단일 조회 (DTO로 반환)
     @GetMapping("/{toDoId}")
-    public ResponseEntity<ToDo> getToDoById(@PathVariable Long toDoId) {
-        Optional<ToDo> toDo = toDoService.getToDoById(toDoId);
-        return toDo.map(ResponseEntity::ok)
+    public ResponseEntity<SelectToDoDTO> getToDoById(@PathVariable Long toDoId) {
+        Optional<SelectToDoDTO> toDoDTO = toDoService.getToDoById(toDoId);
+        return toDoDTO.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 

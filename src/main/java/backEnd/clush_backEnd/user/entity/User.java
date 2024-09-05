@@ -4,12 +4,15 @@ import backEnd.clush_backEnd.calendar.entity.CalendarEvent;
 import backEnd.clush_backEnd.calendar.entity.EventShare;
 import backEnd.clush_backEnd.todo.entity.ToDo;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Id
     @GeneratedValue
@@ -56,12 +59,12 @@ public class User {
 
     public void addCalendarEvent(CalendarEvent event) {
         this.calendarEvents.add(event);
-        event.setUser(this);
+        event.assignUser(this);  // 명시적 메서드 호출
     }
 
     public void removeCalendarEvent(CalendarEvent event) {
         this.calendarEvents.remove(event);
-        event.setUser(null);
+        event.assignUser(null);  // 유저와의 관계 해제
     }
 
     public void addSharedEventByMe(EventShare eventShare) {

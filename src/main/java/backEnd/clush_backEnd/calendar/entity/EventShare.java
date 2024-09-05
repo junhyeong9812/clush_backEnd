@@ -2,12 +2,15 @@ package backEnd.clush_backEnd.calendar.entity;
 
 import backEnd.clush_backEnd.user.entity.User;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EventShare {
     @Id
     @GeneratedValue
@@ -31,6 +34,17 @@ public class EventShare {
 
     // 공유된 시간
     private LocalDateTime sharedAt;
+
+
+    // 생성자 추가
+    public EventShare(CalendarEvent event, User sharedByUser, User sharedUser, LocalDateTime sharedAt) {
+        setEvent(event);
+        setSharedByUser(sharedByUser);
+        setSharedUser(sharedUser);
+        this.sharedAt = sharedAt;
+    }
+
+
     public void setEvent(CalendarEvent event) {
         if (this.event != null) {
             this.event.getSharedUsers().remove(this);
