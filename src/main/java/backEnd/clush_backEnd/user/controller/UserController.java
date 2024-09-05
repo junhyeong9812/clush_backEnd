@@ -3,6 +3,7 @@ package backEnd.clush_backEnd.user.controller;
 
 import backEnd.clush_backEnd.user.DTO.LoginDTO;
 import backEnd.clush_backEnd.user.DTO.RegisterDTO;
+import backEnd.clush_backEnd.user.DTO.UserDTO;
 import backEnd.clush_backEnd.user.entity.User;
 import backEnd.clush_backEnd.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -57,16 +58,16 @@ public class UserController {
     }
     // 회원 단건 조회
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
-        return user.map(ResponseEntity::ok)
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+        Optional<UserDTO> userDTO = userService.getUserById(id);
+        return userDTO.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     // 회원 전체 조회
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 }

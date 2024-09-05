@@ -6,6 +6,7 @@ import backEnd.clush_backEnd.calendar.DTO.DeleteEventRequestDTO;
 import backEnd.clush_backEnd.calendar.DTO.ShareEventRequestDTO;
 import backEnd.clush_backEnd.calendar.entity.CalendarEvent;
 import backEnd.clush_backEnd.calendar.entity.EventShare;
+import backEnd.clush_backEnd.calendar.entity.EventShareStatus;
 import backEnd.clush_backEnd.calendar.repository.CalendarEventRepository;
 import backEnd.clush_backEnd.calendar.repository.EventShareRepository;
 import backEnd.clush_backEnd.user.entity.User;
@@ -76,11 +77,14 @@ public class CalendarEventService {
                 ));
     }
 
-    // 유저 일정 및 공유받은 일정 조회 (읽기 전용)
+    // 유저 일정 및 공유받은 일정 조회 (수락된 일정만)
     @Transactional(readOnly = true)
     public List<CalendarEventDTO> getAllEventsForUser(Long userId) {
+        // 자신이 생성한 일정 조회
         List<CalendarEvent> userEvents = calendarEventRepository.findByUserId(userId);
-        List<EventShare> sharedEvents = eventShareRepository.findBySharedUserId(userId);
+
+        // 자신이 공유받은 일정 중 수락된 일정 조회
+        List<EventShare> acceptedShares = eventShareRepository.findBySharedUserIdAndStatus(userId, EventShareStatus.ACCEPTED);
 
         List<CalendarEventDTO> eventDTOs = userEvents.stream()
                 .map(event -> new CalendarEventDTO(
@@ -96,7 +100,7 @@ public class CalendarEventService {
                 ))
                 .collect(Collectors.toList());
 
-        List<CalendarEventDTO> sharedEventDTOs = sharedEvents.stream()
+        List<CalendarEventDTO> sharedEventDTOs = acceptedShares.stream()
                 .map(share -> new CalendarEventDTO(
                         share.getEvent().getId(),
                         share.getEvent().getTitle(),
@@ -150,5 +154,29 @@ public class CalendarEventService {
 
         EventShare eventShare = new EventShare(event, sharedByUser, sharedUser, LocalDateTime.now());
         return eventShareRepository.save(eventShare);
+    }
+
+    // 일정 확인 로직
+    public void markEventAsViewed(Long eventShareId) {
+        EventShare eventShare = eventShareRepository.findById(eventShareId)
+                .orElseThrow(() -> new RuntimeException("EventShare not found"));
+        eventShare.markAsViewed();  // 일정 확인 처리
+        eventShareRepository.save(eventShare);  // 상태 저장
+    }
+
+    // 일정 수락
+    public void acceptEventShare(Long eventShareId) {
+        EventShare eventShare = eventShareRepository.findById(eventShareId)
+                .orElseThrow(() -> new RuntimeException("EventShare not found"));
+        eventShare.accept();  // 일정 수락 처리
+        eventShareRepository.save(eventShare);
+    }
+
+    // 일정 거절
+    public void declineEventShare(Long eventShareId) {
+        EventShare eventShare = eventShareRepository.findById(eventShareId)
+                .orElseThrow(() -> new RuntimeException("EventShare not found"));
+        eventShare.decline();  // 일정 거절 처리
+        eventShareRepository.save(eventShare);
     }
 }

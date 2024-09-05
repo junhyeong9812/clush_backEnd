@@ -44,11 +44,11 @@ public class ToDoService {
 
 
     // 할 일 수정
-    public Long updateToDo(Long toDoId, ToDoStatus status) {
+    public Long updateToDo(Long toDoId, ToDoStatus newStatus) {
         Optional<ToDo> toDoOptional = toDoRepository.findById(toDoId);
         if (toDoOptional.isPresent()) {
             ToDo toDo = toDoOptional.get();
-            toDo.setStatus(status);
+            toDo.changeStatus(newStatus);  // 상태 변경 메서드 호출
             return toDo.getId();
         } else {
             throw new RuntimeException("투두 목록이 없습니다.");

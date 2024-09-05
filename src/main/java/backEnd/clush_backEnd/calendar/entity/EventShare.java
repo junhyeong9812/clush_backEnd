@@ -35,6 +35,18 @@ public class EventShare {
     // 공유된 시간
     private LocalDateTime sharedAt;
 
+    // 일정 확인 여부 (기본값: false)
+    private Boolean isViewed = false;
+
+    // 공유 상태 (PENDING, ACCEPTED, DECLINED)
+    @Enumerated(EnumType.STRING)
+    private EventShareStatus status = EventShareStatus.PENDING;
+
+    // 일정 확인 상태 업데이트
+    public void markAsViewed() {
+        this.isViewed = true;
+    }
+
 
     // 생성자 추가
     public EventShare(CalendarEvent event, User sharedByUser, User sharedUser, LocalDateTime sharedAt) {
@@ -73,5 +85,15 @@ public class EventShare {
         if (user != null && !user.getSharedEventsWithMe().contains(this)) {
             user.getSharedEventsWithMe().add(this);
         }
+    }
+
+    // 일정 수락
+    public void accept() {
+        this.status = EventShareStatus.ACCEPTED;
+    }
+
+    // 일정 거절
+    public void decline() {
+        this.status = EventShareStatus.DECLINED;
     }
 }

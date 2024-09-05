@@ -1,5 +1,6 @@
 package backEnd.clush_backEnd.user.service;
 
+import backEnd.clush_backEnd.user.DTO.UserDTO;
 import backEnd.clush_backEnd.user.entity.User;
 import backEnd.clush_backEnd.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -39,15 +41,18 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    // 회원 단건 조회
+    // 회원 단건 조회 - DTO 변환
     @Transactional(readOnly = true)
-    public Optional<User> getUserById(Long userId) {
-        return userRepository.findById(userId);
+    public Optional<UserDTO> getUserById(Long userId) {
+        return userRepository.findById(userId)
+                .map(user -> new UserDTO(user.getId(), user.getUsername(), user.getEmail()));
     }
 
-    // 회원 전체 조회
+    // 회원 전체 조회 - DTO 변환
     @Transactional(readOnly = true)
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> new UserDTO(user.getId(), user.getUsername(), user.getEmail()))
+                .collect(Collectors.toList());
     }
 }

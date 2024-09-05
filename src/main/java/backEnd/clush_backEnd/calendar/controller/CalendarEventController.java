@@ -69,4 +69,23 @@ public class CalendarEventController {
         EventShare eventShare = calendarEventService.shareEvent(shareEventRequestDTO);
         return ResponseEntity.ok(eventShare);
     }
+    // 일정 확인 API
+    @PostMapping("/event-share/{id}/viewed")
+    public ResponseEntity<Void> markEventAsViewed(@PathVariable Long id) {
+        calendarEventService.markEventAsViewed(id);
+        return ResponseEntity.ok().build();
+    }
+    // 일정 공유 수락 API
+    @PostMapping("/event-share/{id}/accept")
+    public ResponseEntity<Void> acceptEventShare(@PathVariable Long id) {
+        calendarEventService.acceptEventShare(id);
+        return ResponseEntity.ok().build();
+    }
+
+    // 일정 공유 거절 API
+    @PostMapping("/event-share/{id}/decline")
+    public ResponseEntity<Void> declineEventShare(@PathVariable Long id) {
+        calendarEventService.declineEventShare(id);
+        return ResponseEntity.ok().build();
+    }
 }
