@@ -60,6 +60,7 @@ bash
 
 # 프로젝트 실행
 ./gradlew bootRun
+
 2.5. Swagger 문서 접근
 프로젝트가 실행되면 Swagger UI에서 API 명세를 확인할 수 있습니다.
 
