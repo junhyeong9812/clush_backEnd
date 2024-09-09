@@ -40,7 +40,8 @@ public class EventShare {
 
     // 공유 상태 (PENDING, ACCEPTED, DECLINED)
     @Enumerated(EnumType.STRING)
-    private EventShareStatus status = EventShareStatus.PENDING;
+//    private EventShareStatus status = EventShareStatus.PENDING;
+    private EventShareStatus status = EventShareStatus.ACCEPTED;
 
     // 일정 확인 상태 업데이트
     public void markAsViewed() {

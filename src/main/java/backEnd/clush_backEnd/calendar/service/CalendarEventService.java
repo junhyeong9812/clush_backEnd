@@ -12,6 +12,7 @@ import backEnd.clush_backEnd.calendar.repository.EventShareRepository;
 import backEnd.clush_backEnd.user.entity.User;
 import backEnd.clush_backEnd.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,11 +26,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional  // 전체 서비스에 트랜잭션 적용
+@Slf4j
 public class CalendarEventService {
 
     private final CalendarEventRepository calendarEventRepository;
     private final UserRepository userRepository;
     private final EventShareRepository eventShareRepository;
+    
 
     // 일정 생성
     public CalendarEvent createEvent(Long userId, CreateOrUpdateEventRequestDTO requestDTO) {
@@ -49,15 +52,17 @@ public class CalendarEventService {
     public CalendarEvent updateEvent(Long eventId, CreateOrUpdateEventRequestDTO requestDTO) {
         CalendarEvent event = calendarEventRepository.findById(eventId)
                 .orElseThrow(() -> new RuntimeException("Event not found"));
-        event = CalendarEvent.builder()
-                .title(requestDTO.getTitle())
-                .description(requestDTO.getDescription())
-                .startTime(requestDTO.getStartTime())
-                .endTime(requestDTO.getEndTime())
-                .allDay(requestDTO.isAllDay())
-                .user(event.getUser())  // 기존 소유자 유지
-                .build();
-        return calendarEventRepository.save(event);
+        // 엔티티의 상태 변경 메서드를 통해 필드 업데이트
+        event.updateEvent(
+                requestDTO.getTitle(),
+                requestDTO.getDescription(),
+                requestDTO.getStartTime(),
+                requestDTO.getEndTime(),
+                requestDTO.isAllDay()
+        );
+
+        log.info("event 일정 수정 = {}", event);
+        return event;
     }
 
     // 단일 일정 조회 (읽기 전용)
@@ -101,6 +106,7 @@ public class CalendarEventService {
                 .collect(Collectors.toList());
 
         List<CalendarEventDTO> sharedEventDTOs = acceptedShares.stream()
+                .filter(share -> !share.getSharedByUser().getId().equals(userId)) // 공유자와 본인 id가 다를 경우만 포함
                 .map(share -> new CalendarEventDTO(
                         share.getEvent().getId(),
                         share.getEvent().getTitle(),

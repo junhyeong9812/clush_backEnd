@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class CalendarEvent {
     private User user;  // 일정을 소유한 사용자
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EventShare> sharedUsers;
+    private List<EventShare> sharedUsers = new ArrayList<>();;
 
 
 
@@ -61,15 +62,12 @@ public class CalendarEvent {
         }
     }
 
-    // 일정 수정 메서드 (빌더 패턴 사용)
-    public CalendarEvent updateEvent(String title, String description, LocalDateTime startTime, LocalDateTime endTime, boolean allDay) {
-        return CalendarEvent.builder()
-                .title(title != null ? title : this.title)
-                .description(description != null ? description : this.description)
-                .startTime(startTime != null ? startTime : this.startTime)
-                .endTime(endTime != null ? endTime : this.endTime)
-                .allDay(allDay)
-                .user(this.user)  // 기존 유저 유지
-                .build();
+    // 일정 수정 메서드
+    public void updateEvent(String title, String description, LocalDateTime startTime, LocalDateTime endTime, boolean allDay) {
+        this.title = title != null ? title : this.title;
+        this.description = description != null ? description : this.description;
+        this.startTime = startTime != null ? startTime : this.startTime;
+        this.endTime = endTime != null ? endTime : this.endTime;
+        this.allDay = allDay;
     }
 }
