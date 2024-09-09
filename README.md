@@ -149,3 +149,5 @@ CREATE TABLE `event_share` (
   FOREIGN KEY (`shared_user_id`) REFERENCES `user` (`user_id`)
 );
 ```
+
+###프론트엔드 깃주소: https://github.com/junhyeong9812/clush_front
