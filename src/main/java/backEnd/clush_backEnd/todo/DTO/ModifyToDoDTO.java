@@ -9,12 +9,12 @@ public class ModifyToDoDTO {
     private Long userId;
     private String title;
     private String description;
-    private ToDoStatus Status;
+    private ToDoStatus status;
 
     public ModifyToDoDTO(Long userId, String title, String description, ToDoStatus status) {
         this.userId = userId;
         this.title = title;
         this.description = description;
-        Status = status;
+        this.status = status;
     }
 }

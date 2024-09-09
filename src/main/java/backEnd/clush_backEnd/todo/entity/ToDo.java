@@ -89,4 +89,13 @@ public class ToDo {
         this.status = ToDoStatus.CANCELLED;
         // 취소 시 필요한 추가 로직
     }
+    //수정 메소드
+    public void updateToDoDetails(String title, String description) {
+        if (title != null && !title.isEmpty()) {
+            this.title = title;
+        }
+        if (description != null && !description.isEmpty()) {
+            this.description = description;
+        }
+    }
 }

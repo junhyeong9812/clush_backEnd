@@ -52,19 +52,33 @@ public class ToDoController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    // 할 일 수정
-    @PutMapping("/{toDoId}")
-    public ResponseEntity<Map<String, Boolean>> updateToDo(@RequestBody ModifyToDoDTO toDoRequest) {
-        Map<String, Boolean> response = new HashMap<>();
-        try {
-            toDoService.updateToDo(toDoRequest.getUserId(), toDoRequest.getStatus());
-            response.put("success", true);
-            return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            response.put("success", false);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
+//    // 할 일 수정
+//    @PutMapping("/{toDoId}")
+//    public ResponseEntity<Map<String, Boolean>> updateToDo(@RequestBody ModifyToDoDTO toDoRequest) {
+//        Map<String, Boolean> response = new HashMap<>();
+//        try {
+//            toDoService.updateToDo(toDoRequest.getUserId(), toDoRequest.getStatus());
+//            response.put("success", true);
+//            return ResponseEntity.ok(response);
+//        } catch (RuntimeException e) {
+//            response.put("success", false);
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+//        }
+//    }
+// 할 일 수정 (title, description, status 모두 업데이트)
+@PutMapping("/{toDoId}")
+public ResponseEntity<Map<String, Boolean>> updateToDo(@PathVariable Long toDoId, @RequestBody ModifyToDoDTO toDoRequest) {
+    Map<String, Boolean> response = new HashMap<>();
+    try {
+        // 서비스 호출 (title, description, status 모두 업데이트)
+        toDoService.updateToDo(toDoId, toDoRequest.getTitle(), toDoRequest.getDescription(), toDoRequest.getStatus());
+        response.put("success", true);
+        return ResponseEntity.ok(response);
+    } catch (RuntimeException e) {
+        response.put("success", false);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+}
 
     // 할 일 삭제
     @DeleteMapping("/{toDoId}")

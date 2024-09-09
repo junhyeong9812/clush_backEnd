@@ -44,11 +44,35 @@ public class ToDoService {
 
 
     // 할 일 수정
-    public Long updateToDo(Long toDoId, ToDoStatus newStatus) {
+//    public Long updateToDo(Long toDoId, ToDoStatus newStatus) {
+//        Optional<ToDo> toDoOptional = toDoRepository.findById(toDoId);
+//        if (toDoOptional.isPresent()) {
+//            ToDo toDo = toDoOptional.get();
+//            toDo.changeStatus(newStatus);  // 상태 변경 메서드 호출
+//            return toDo.getId();
+//        } else {
+//            throw new RuntimeException("투두 목록이 없습니다.");
+//        }
+//    }
+    // 할 일 수정 메서드 (status만 변경할 때)
+    public Long updateToDoStatus(Long toDoId, ToDoStatus newStatus) {
         Optional<ToDo> toDoOptional = toDoRepository.findById(toDoId);
         if (toDoOptional.isPresent()) {
             ToDo toDo = toDoOptional.get();
             toDo.changeStatus(newStatus);  // 상태 변경 메서드 호출
+            return toDo.getId();
+        } else {
+            throw new RuntimeException("투두 목록이 없습니다.");
+        }
+    }
+
+    // 할 일 수정 메서드 (status 외에 title과 description도 수정)
+    public Long updateToDo(Long toDoId, String title, String description, ToDoStatus newStatus) {
+        Optional<ToDo> toDoOptional = toDoRepository.findById(toDoId);
+        if (toDoOptional.isPresent()) {
+            ToDo toDo = toDoOptional.get();
+            toDo.updateToDoDetails(title, description);  // 타이틀과 설명 변경
+            toDo.changeStatus(newStatus);  // 상태 변경
             return toDo.getId();
         } else {
             throw new RuntimeException("투두 목록이 없습니다.");
