@@ -72,6 +72,19 @@ spring.application.timezone=Asia/Seoul
 MySQL: 안정적이고 널리 사용되는 관계형 데이터베이스로, 데이터의 영속성과 신뢰성을 위해 선택하였습니다.
 - **Lombok**: @Getter, @NoArgsConstructor와 같은 어노테이션을 사용하여 보일러플레이트 코드를 줄이고, 유지보수를 용이하게 하기 위해 사용했습니다.
 - **Swagger**: API 문서화를 위해 사용했습니다. 이를 통해 클라이언트가 API 명세를 쉽게 확인하고 테스트할 수 있습니다.
+@RestController: 이 어노테이션은 해당 클래스가 RESTful 웹 서비스의 엔드포인트로 사용됨을 의미합니다. Spring MVC에서 HTTP 요청을 받아들이고, JSON 또는 XML 형태로 응답을 반환하는 역할을 하죠. 주로 API를 제공할 때 사용됩니다.
+
+@Service: 이 어노테이션은 비즈니스 로직을 처리하는 서비스 계층을 나타냅니다. 해당 클래스는 주로 비즈니스 로직을 수행하며, 데이터베이스나 다른 외부 API와 상호작용하는 코드를 포함합니다.
+
+@Repository: 이 어노테이션은 데이터 액세스 계층을 나타냅니다. 데이터베이스와의 상호작용을 처리하고, Spring Data JPA를 사용하면 기본적인 CRUD 기능을 자동으로 제공할 수 있습니다.
+
+@RequiredArgsConstructor: 이 어노테이션은 클래스에 정의된 final 필드들을 자동으로 생성자 주입할 수 있게 도와줍니다. 의존성 주입을 간단하게 처리할 수 있어 코드의 간결성을 높여줍니다.
+
+사용 이유
+@RestController: REST API 요청을 처리하기 위해 사용됩니다. HTTP 메서드(GET, POST, PUT, DELETE)에 따라 클라이언트의 요청을 처리하고 JSON 형식의 데이터를 반환합니다.
+@Service: 비즈니스 로직을 분리하고, 코드의 재사용성을 높이기 위해 서비스 계층을 분리해서 사용합니다.
+@Repository: 데이터베이스와의 상호작용을 쉽게 관리하고, Spring Data JPA의 장점을 활용하여 복잡한 SQL 없이 데이터 작업을 처리할 수 있게 도와줍니다.
+@RequiredArgsConstructor: 의존성 주입을 간결하게 처리하여 코드를 단순화하고 유지보수성을 높이기 위해 사용합니다.
 
 
 ### 4. API 명세
