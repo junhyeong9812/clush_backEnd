@@ -86,7 +86,6 @@ MySQL: 안정적이고 널리 사용되는 관계형 데이터베이스로, 데�
 @Repository: 데이터베이스와의 상호작용을 쉽게 관리하고, Spring Data JPA의 장점을 활용하여 복잡한 SQL 없이 데이터 작업을 처리할 수 있게 도와줍니다.
 @RequiredArgsConstructor: 의존성 주입을 간결하게 처리하여 코드를 단순화하고 유지보수성을 높이기 위해 사용합니다.
 
-
 ### 4. API 명세
 ### 4.1. 할 일(ToDo) API
 - POST /api/todo/create: 할 일 생성
